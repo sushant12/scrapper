@@ -14,7 +14,8 @@ defmodule Scrapper.Application do
       # Start the PubSub system
       {Phoenix.PubSub, name: Scrapper.PubSub},
       # Start the Endpoint (http/https)
-      ScrapperWeb.Endpoint
+      ScrapperWeb.Endpoint,
+      {Oban, oban_config()}
       # Start a worker by calling: Scrapper.Worker.start_link(arg)
       # {Scrapper.Worker, arg}
     ]
@@ -30,5 +31,9 @@ defmodule Scrapper.Application do
   def config_change(changed, _new, removed) do
     ScrapperWeb.Endpoint.config_change(changed, removed)
     :ok
+  end
+
+  defp oban_config do
+    Application.get_env(:scrapper, Oban)
   end
 end

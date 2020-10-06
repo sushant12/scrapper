@@ -1,1 +1,5 @@
-<p> Hello world </p>
+<%= for data_source <- @data_sources do %>
+  <%= data_source.name %>
+  <button>Scrape</button>
+  <br>
+<% end %>

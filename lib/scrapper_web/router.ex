@@ -1,5 +1,6 @@
 defmodule ScrapperWeb.Router do
   use ScrapperWeb, :router
+  import ObanUi.Router
 
   pipeline :browser do
     plug :accepts, ["html"]
@@ -16,7 +17,7 @@ defmodule ScrapperWeb.Router do
 
   scope "/", ScrapperWeb do
     pipe_through :browser
-
+    oban_web("/oban")
     live "/", PageLive, :index
     resources "/home", HomeController, only: [:index]
   end
