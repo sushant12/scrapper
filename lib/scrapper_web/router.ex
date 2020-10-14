@@ -20,6 +20,7 @@ defmodule ScrapperWeb.Router do
     oban_web("/oban")
     live "/", PageLive, :index
     resources "/home", HomeController, only: [:index]
+    get "/scrape", HomeController, :scrape
   end
 
   # Other scopes may use custom stacks.

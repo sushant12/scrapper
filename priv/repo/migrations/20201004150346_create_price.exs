@@ -3,12 +3,13 @@ defmodule Scrapper.Repo.Migrations.CreatePrice do
 
   def change do
     create table(:price) do
-      add :price, :float
-      add :item_id, references(:item, on_delete: :nothing)
+      add :price, :string
+      add :created_at, :date
+      add :item_id, references(:items, on_delete: :nothing)
 
       timestamps()
     end
 
-    create index(:price, [:item_id])
+    create unique_index(:price, [:item_id, :created_at])
   end
 end

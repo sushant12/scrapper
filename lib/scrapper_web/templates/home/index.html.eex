@@ -1,5 +1,15 @@
-<%= for data_source <- @data_sources do %>
-  <%= data_source.name %>
-  <button>Scrape</button>
-  <br>
-<% end %>
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Last Scrapped On</th>
+    <th>Action</th>
+  </tr>
+
+  <%= for data_source <- @data_sources do %>
+    <tr>
+      <td> <%= data_source.name %> </td>
+      <td> <%= data_source.last_run_at %> </td>
+      <td> <a>Scrape</button> </td>
+    </tr>
+  <% end %>
+</table>
