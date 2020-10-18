@@ -4,7 +4,7 @@ defmodule Scrapper.Schema.DataSources do
   alias Scrapper.Schema.Items
 
   schema "data_sources" do
-    field :last_run_at, :utc_datetime_usec
+    field :last_run_at, :date
     field :name, :string
     has_many(:items, Items)
     timestamps()

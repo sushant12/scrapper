@@ -15,4 +15,10 @@ defmodule Scrapper.Query.DataSource do
   def list_data_sources do
     Repo.all(DataSources)
   end
+
+  def update_data_source(%DataSources{} = data_source, attrs) do
+    data_source
+    |> DataSources.changeset(attrs)
+    |> Repo.update!()
+  end
 end

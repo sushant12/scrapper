@@ -20,13 +20,7 @@ defmodule Scrapper.Application do
       # {Scrapper.Worker, arg}
     ]
 
-    # :ok =
-    #   :telemetry.attach(
-    #     "oban-logger",
-    #     [:oban, :job, :start],
-    #     &MicroLogger.handle_event/4,
-    #     nil
-    #   )
+    :telemetry.attach("oban-logger", [:oban, :job, :start], &MicroLogger.handle_event/4, nil)
 
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options

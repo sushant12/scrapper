@@ -29,7 +29,7 @@ config :phoenix, :json_library, Jason
 config :scrapper, Oban,
   repo: Scrapper.Repo,
   plugins: [Oban.Plugins.Pruner],
-  queues: [gyapu: 40, sastodeal: 40, daraz: 40, infistore: 40, smartdoko: 40]
+  queues: [gyapu: 40, sastodeal: 40, daraz: 40, infi: 40, smartdoko: 40]
 
 config :oban_ui, repo: Scrapper.Repo, app_name: ScrapperWeb
 # Import environment specific config. This must remain at the bottom

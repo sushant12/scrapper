@@ -4,7 +4,7 @@ defmodule Scrapper.Repo.Migrations.CreateDataSource do
   def change do
     create table(:data_sources) do
       add :name, :string
-      add :last_run_at, :utc_datetime_usec
+      add :last_run_at, :date
 
       timestamps()
     end

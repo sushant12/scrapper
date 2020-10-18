@@ -9,7 +9,14 @@
     <tr>
       <td> <%= data_source.name %> </td>
       <td> <%= data_source.last_run_at %> </td>
-      <td> <a>Scrape</button> </td>
+      <td>
+        <%= if total_running_jobs(data_source.name) > 0 do %>
+          <button disabled=true>Scrape</button>
+          <%= total_running_jobs(data_source.name) %> jobs running
+        <%= else %>
+          <a href="<%= Routes.home_path(@conn, :scrape, data_source: data_source.name) %>" class="button">Scrape </a>
+        <% end %>
+      </td>
     </tr>
   <% end %>
 </table>
