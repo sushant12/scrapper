@@ -8,7 +8,7 @@ defmodule Scrapper.Schema.Items do
     field :image, :string
     field :name, :string
     field :price, :string
-    belongs_to(:data_sources, DataSources)
+    belongs_to(:data_source, DataSources)
 
     timestamps()
   end

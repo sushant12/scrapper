@@ -17,6 +17,7 @@ defmodule Scrapper.GyapuWorker do
           name: item["name"],
           description: item["description"],
           price: "#{item["min_sales_price"]}",
+          image: item["image"] |> List.first() |> Map.get("document") |> Map.get("path"),
           data_source_id: data_source_id,
           inserted_at: timestamp,
           updated_at: timestamp
