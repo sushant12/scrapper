@@ -20,7 +20,7 @@ defmodule Scrapper.MixProject do
   def application do
     [
       mod: {Scrapper.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:logger, :runtime_tools, :httpoison]
     ]
   end
 
@@ -38,7 +38,7 @@ defmodule Scrapper.MixProject do
       {:ecto_sql, "~> 3.4"},
       {:postgrex, ">= 0.0.0"},
       {:phoenix_live_view, "~> 0.13.0"},
-      {:floki, ">= 0.0.0", only: :test},
+      {:floki, "~> 0.26.0"},
       {:phoenix_html, "~> 2.11"},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
       {:phoenix_live_dashboard, "~> 0.2"},
@@ -47,11 +47,11 @@ defmodule Scrapper.MixProject do
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
-      # {:crawly, "~> 0.11.0"},
       {:tesla, "~> 1.3.0"},
       {:oban, "~> 2.2"},
-      # {:oban_ui, path: "/home/sushant/Documents/elixir/oban_ui"}
-      {:oban_ui, git: "https://github.com/sushant12/oban_ui.git", branch: "master"}
+      {:httpoison, "~> 1.6"},
+      {:oban_ui, path: "/home/sushant/Documents/elixir/oban_ui"}
+      # {:oban_ui, git: "https://github.com/sushant12/oban_ui.git", branch: "master"}
     ]
   end
 

@@ -22,4 +22,22 @@ defmodule ScrapperWeb.HomeController do
     |> put_flash(:info, "Started!")
     |> redirect(to: Routes.home_path(conn, :index))
   end
+
+  def scrape(conn, %{"data_source" => "sastodeal.com"}) do
+    data_source = DataSource.get_data_source("sastodeal.com")
+
+    [
+      "https://www.sastodeal.com/electronic/televisions/mi.html",
+      "https://www.sastodeal.com/sd-fast/sd-liquors.html"
+    ]
+    |> Enum.map(fn url ->
+      %{url: url, data_source_id: data_source.id}
+      |> Scrapper.SastodealWorker.new()
+      |> Oban.insert()
+    end)
+
+    conn
+    |> put_flash(:info, "Started!")
+    |> redirect(to: Routes.home_path(conn, :index))
+  end
 end

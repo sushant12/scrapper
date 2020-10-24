@@ -32,6 +32,7 @@ config :scrapper, Oban,
   queues: [gyapu: 40, sastodeal: 40, daraz: 40, infi: 40, smartdoko: 40]
 
 config :oban_ui, repo: Scrapper.Repo, app_name: ScrapperWeb
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{Mix.env()}.exs"
