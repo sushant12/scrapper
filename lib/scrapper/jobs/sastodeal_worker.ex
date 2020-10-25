@@ -5,9 +5,12 @@ defmodule Scrapper.SastodealWorker do
   alias Scrapper.Schema.{Items, Price}
 
   @impl Oban.Worker
-  def perform(%Oban.Job{args: %{"url" => url, "data_source_id" => data_source_id}}) do
+  def perform(%Oban.Job{
+        args: %{"type" => "single", "url" => url, "data_source_id" => data_source_id}
+      }) do
     items =
       HTTPoison.get!(url)
+      |> extract_html
       |> parse_item(data_source_id)
 
     Repo.insert_all(Items, items,
@@ -41,8 +44,37 @@ defmodule Scrapper.SastodealWorker do
     :ok
   end
 
-  def parse_item(response, data_source_id) do
-    {:ok, document} = Floki.parse_document(response.body)
+  @impl Oban.Worker
+  def perform(%Oban.Job{
+        args: %{
+          "type" => "params",
+          "url" => url,
+          "params" => params,
+          "data_source_id" => data_source_id
+        }
+      }) do
+    html =
+      HTTPoison.get!(url <> params)
+      |> valid_json_response
+
+    case html do
+      :discard ->
+        :discard
+
+      _ ->
+        2..String.to_integer(get_total_pages(html))
+        |> Enum.each(fn x ->
+          %{type: "single", url: "#{url}?is_scroll=1&p=#{x}", data_source_id: data_source_id}
+          |> Scrapper.SastodealWorker.new()
+          |> Oban.insert()
+        end)
+
+        :ok
+    end
+  end
+
+  defp parse_item(html, data_source_id) do
+    {:ok, document} = Floki.parse_document(html)
 
     {"ol", [{"class", "products list items product-items"}], items} =
       document
@@ -79,5 +111,34 @@ defmodule Scrapper.SastodealWorker do
         updated_at: timestamp
       }
     end)
+  end
+
+  defp parse_html_fragment(html_fragment) do
+    Floki.parse_fragment!(html_fragment)
+    |> List.first()
+  end
+
+  defp get_total_pages(html_fragment) do
+    parse_html_fragment(html_fragment) |> Floki.find("div#am-page-count") |> Floki.text()
+  end
+
+  defp valid_json_response(response) do
+    case response.body |> Jason.decode() do
+      {:ok, %{"categoryProducts" => html_fragment}} ->
+        html_fragment
+
+      _ ->
+        :discard
+    end
+  end
+
+  defp extract_html(response) do
+    case valid_json_response(response) do
+      :discard ->
+        response.body
+
+      html_fragment ->
+        html_fragment
+    end
   end
 end

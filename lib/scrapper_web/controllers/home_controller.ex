@@ -12,7 +12,7 @@ defmodule ScrapperWeb.HomeController do
     data_source = DataSource.get_data_source("gyapu.com")
 
     ["/dashain-dhamaka", "/civil-mall"]
-    |> Enum.map(fn url ->
+    |> Enum.each(fn url ->
       %{url: url, data_source_id: data_source.id}
       |> Scrapper.GyapuWorker.new()
       |> Oban.insert()
@@ -26,12 +26,23 @@ defmodule ScrapperWeb.HomeController do
   def scrape(conn, %{"data_source" => "sastodeal.com"}) do
     data_source = DataSource.get_data_source("sastodeal.com")
 
-    [
+    urls = [
       "https://www.sastodeal.com/electronic/televisions/mi.html",
-      "https://www.sastodeal.com/sd-fast/sd-liquors.html"
+      "https://www.sastodeal.com/sd-fast/sd-liquors.html",
+      "https://www.sastodeal.com/sd-fast/frozen-food.html",
+      "https://www.sastodeal.com/sd-fast/food-essentials.html"
     ]
-    |> Enum.map(fn url ->
-      %{url: url, data_source_id: data_source.id}
+
+    urls
+    |> Enum.each(fn url ->
+      %{type: "single", url: url, data_source_id: data_source.id}
+      |> Scrapper.SastodealWorker.new()
+      |> Oban.insert()
+    end)
+
+    urls
+    |> Enum.each(fn url ->
+      %{type: "params", url: url, params: "?is_scroll=1&p=2", data_source_id: data_source.id}
       |> Scrapper.SastodealWorker.new()
       |> Oban.insert()
     end)
