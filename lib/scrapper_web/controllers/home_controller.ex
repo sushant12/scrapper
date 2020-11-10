@@ -8,6 +8,24 @@ defmodule ScrapperWeb.HomeController do
     render(conn, "index.html", data_sources: data_sources)
   end
 
+  def scrape(conn, %{"data_source" => "daraz.com"}) do
+    data_source = DataSource.get_data_source("daraz.com")
+
+    [
+      "https://www.daraz.com.np/mobiles-tablets-accessories",
+      "https://www.daraz.com.np/mens-clothing"
+    ]
+    |> Enum.each(fn url ->
+      %{type: "single", url: url, data_source_id: data_source.id}
+      |> Scrapper.DarazWorker.new()
+      |> Oban.insert()
+    end)
+
+    conn
+    |> put_flash(:info, "Started!")
+    |> redirect(to: Routes.home_path(conn, :index))
+  end
+
   def scrape(conn, %{"data_source" => "gyapu.com"}) do
     data_source = DataSource.get_data_source("gyapu.com")
 

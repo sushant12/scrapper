@@ -9,7 +9,7 @@ defmodule Scrapper.Helpers.Job do
     |> check_running_jobs()
   end
 
-  def total_running_jobs("daraaz.com") do
+  def total_running_jobs("daraz.com") do
     Oban.check_queue(queue: :daraz)
     |> check_running_jobs()
   end
